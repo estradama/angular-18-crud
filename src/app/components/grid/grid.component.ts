@@ -5,8 +5,10 @@ import {MatSort, MatSortModule} from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import {MatInput} from '@angular/material/input';
 import { FilterComponent } from "./filter/filter.component";
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 
-const MATERIAL_MODULES = [MatTableModule,MatSortModule,MatPaginatorModule];
+const MATERIAL_MODULES = [MatTableModule,MatSortModule,MatPaginatorModule, MatButtonModule, MatIconModule];
 @Component({
   selector: 'app-grid',
   standalone: true,
@@ -18,7 +20,7 @@ export class GridComponent<T> implements OnInit {
  
   displayedColumns = input.required<string[]>();
   data = input.required<T[]>();
-
+  sortableColumns = input<string[]>([]);
   dataSource = new MatTableDataSource<T>();
   valueToFilter = signal('');
   private readonly _sort = viewChild.required<MatSort>(MatSort);
@@ -41,9 +43,5 @@ export class GridComponent<T> implements OnInit {
       
     }
 
-  applyFilter(event:Event): void{
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-  }
-
+ 
 }
