@@ -24,8 +24,8 @@ export class ContactService {
 
     async getContactById(id:string):Promise<Contact>{
         const docRef = this._getDocRef(id);
-        const DocumentData = await getDoc(docRef);
-        return DocumentData.data() as Contact;
+        const documentData = await getDoc(docRef);
+        return documentData.data() as Contact;
     }
     updateContact(id: string, contact:Contact): void{
         const docRef = this._getDocRef(id);
