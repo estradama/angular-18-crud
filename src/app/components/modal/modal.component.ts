@@ -26,11 +26,8 @@ export class ModalComponent implements OnInit{
 
   ngOnInit(): void {
     this._builForm();
+    this.contactForm.patchValue(this._matDialog.data);
 
-    if (this._matDialog.isEditing){
-      this.contactForm.patchValue(this._matDialog.data);
-      this._disabledForm();
-    }
   }
 
   async onSubmit(){
@@ -52,9 +49,6 @@ export class ModalComponent implements OnInit{
     return this._matDialog.data ? 'Edit Contact' : 'Add Contact';
   }
 
-  private _disabledForm(): void {
-    this.contactForm.disable();
-  }
 
   private _builForm(): void{
     this.contactForm = this._fb.nonNullable.group({
