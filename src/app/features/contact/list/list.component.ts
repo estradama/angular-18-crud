@@ -1,8 +1,9 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { GridComponent } from '@components/grid/grid.component';
 import { ColumnKeys, Contact } from '../contact.interfaces';
 import { ContactService } from '../contact.service';
-import {tap} from 'rxjs';
+import {takeUntil, tap} from 'rxjs';
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 
 
 @Component({
@@ -27,6 +28,7 @@ export class ListComponent implements OnInit {
 
 
   private readonly _contactSvc = inject(ContactService);
+  private readonly _destroyRef = inject (DestroyRef);
 
   ngOnInit(): void {
     this.getAllContacts();
@@ -36,6 +38,7 @@ export class ListComponent implements OnInit {
   getAllContacts(){
     this._contactSvc.getAllContacts()
     .pipe(
+      takeUntilDestroyed(this._destroyRef),
       tap((contacts:Contact[]) => this.data = [...contacts])
     )
    .subscribe()
