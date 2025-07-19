@@ -12,6 +12,7 @@ import { ContactService } from '@features/contact/contact.service';
 import { inject } from '@angular/core';
 import { ModalService } from '@components/modal/modal.service';
 import { ModalComponent } from '@components/modal/modal.component';
+import { SnackBarService } from '@shared/services/snack-bar.service';
 
 const MATERIAL_MODULES = [MatTableModule,MatSortModule,MatPaginatorModule, MatButtonModule, MatIconModule];
 @Component({
@@ -32,6 +33,7 @@ export class GridComponent<T> implements OnInit {
   private readonly _paginator = viewChild.required<MatPaginator>(MatPaginator);
   private readonly _contactSvc = inject(ContactService);
   private readonly _modalSvc = inject(ModalService);
+  private readonly _snackBar = inject(SnackBarService);
 
   constructor(){
     effect(()=>{
@@ -39,6 +41,10 @@ export class GridComponent<T> implements OnInit {
         this.dataSource.filter = this.valueToFilter();
       } else {
         this.dataSource.filter= '';
+      }
+
+      if (this.data()){
+        this.dataSource.data = this.data();
       }
     }, {allowSignalWrites: true})
   }
@@ -52,10 +58,16 @@ export class GridComponent<T> implements OnInit {
     openEditForm(data: T): void{
       this._modalSvc.openModal<ModalComponent, T>(ModalComponent, data,true);
     }
+
+    selectedRow(data: T): void{
+      this.openEditForm(data);
+    }
+
     deleteContact(id: string): void{
       const confirmation = confirm(APP_CONSTANTS.MESSAGES.CONFIRMATION_PROMPT)
       if(confirmation){
         this._contactSvc.deleteContact(id);
+        this._snackBar.showSnackBar(APP_CONSTANTS.MESSAGES.CONTACT_DELETED);
       }
     }
 

@@ -7,6 +7,7 @@ import { ContactService } from '@features/contact/contact.service';
 import { ModalService } from './modal.service';
 import { APP_CONSTANTS } from '@shared/constants';
 import { MatButtonModule } from '@angular/material/button';
+import { SnackBarService } from '@shared/services/snack-bar.service';
 
 const MATERIAL_MODULES = [MatLabel, MatFormField, MatInput, MatDialogModule,MatButtonModule]
 @Component({
@@ -23,6 +24,7 @@ export class ModalComponent implements OnInit{
   private readonly _matDialog = inject(MAT_DIALOG_DATA);
   private readonly _contactSvc = inject(ContactService);
   private readonly _modalSvc = inject(ModalService);
+  private readonly _snackBar = inject(SnackBarService);
 
   ngOnInit(): void {
     this._builForm();
@@ -40,8 +42,7 @@ export class ModalComponent implements OnInit{
       message = APP_CONSTANTS.MESSAGES.CONTACT_ADDED;
     }
 
-    // show snackBar
-    console.log(message);
+    this._snackBar.showSnackBar(message);
     this._contactSvc.newContact(contact);
   }
 
