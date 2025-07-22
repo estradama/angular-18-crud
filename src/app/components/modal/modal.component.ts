@@ -27,7 +27,7 @@ export class ModalComponent implements OnInit{
   private readonly _snackBar = inject(SnackBarService);
 
   ngOnInit(): void {
-    this._builForm();
+    this._buildForm();
     this.contactForm.patchValue(this._matDialog.data);
 
   }
@@ -44,6 +44,8 @@ export class ModalComponent implements OnInit{
 
     this._snackBar.showSnackBar(message);
     this._contactSvc.newContact(contact);
+    this._modalSvc.closeModal();
+    
   }
 
   getTitle(): string {
@@ -51,7 +53,7 @@ export class ModalComponent implements OnInit{
   }
 
 
-  private _builForm(): void{
+  private _buildForm(): void{
     this.contactForm = this._fb.nonNullable.group({
       name: ['',Validators.required],
       phone: ['',Validators.required],
